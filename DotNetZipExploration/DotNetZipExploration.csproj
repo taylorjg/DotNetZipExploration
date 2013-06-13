@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DotNetZipTests.cs" />
+    <Compile Include="MyZipDirectory.cs" />
+    <Compile Include="MyZipTreeBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
