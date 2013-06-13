@@ -115,61 +115,6 @@ namespace DotNetZipExploration
         }
 
         [Test]
-        public void GivenAStreamContainingAZipFileContainingAHierarchyOfFilesAndSubDirectories_WeCanCreateADictionaryOfSubDirectoriesToFiles()
-        {
-            // Arrange
-            using (var zipFileStream = ReadZipFile("Hierarchy.zip"))
-            {
-                // Act
-                var zipFile = ZipFile.Read(zipFileStream);
-                var subDirectoriesToFiles = new Dictionary<string, IList<string>>();
-                var fileEntries = zipFile.EntriesSorted.Where(e => !e.IsDirectory);
-                foreach (var fileEntry in fileEntries)
-                {
-                    var lastSlash = fileEntry.FileName.LastIndexOf('/');
-                    var subDirectory = lastSlash >= 0 ? fileEntry.FileName.Substring(0, lastSlash) : string.Empty;
-                    var fileName = lastSlash >= 0 ? fileEntry.FileName.Substring(lastSlash + 1) : fileEntry.FileName;
-                    if (subDirectoriesToFiles.ContainsKey(subDirectory))
-                    {
-                        subDirectoriesToFiles[subDirectory].Add(fileName);
-                    }
-                    else
-                    {
-                        subDirectoriesToFiles.Add(subDirectory, new List<string> {fileName});
-                    }
-                }
-
-                // Assert
-                Assert.That(subDirectoriesToFiles.ContainsKey(""), Is.True);
-                Assert.That(subDirectoriesToFiles[""].Contains("File1.txt"), Is.True);
-                Assert.That(subDirectoriesToFiles[""].Contains("File2.txt"), Is.True);
-                Assert.That(subDirectoriesToFiles[""].Contains("File3.txt"), Is.True);
-
-                Assert.That(subDirectoriesToFiles.ContainsKey("SubDirectoryA"), Is.True);
-                Assert.That(subDirectoriesToFiles["SubDirectoryA"].Contains("SubDirectoryA.txt"), Is.True);
-
-                Assert.That(subDirectoriesToFiles.ContainsKey("SubDirectoryA/SubDirectoryA-1"), Is.True);
-                Assert.That(subDirectoriesToFiles["SubDirectoryA/SubDirectoryA-1"].Contains("SubDirectoryA-1_File1.txt"), Is.True);
-                Assert.That(subDirectoriesToFiles["SubDirectoryA/SubDirectoryA-1"].Contains("SubDirectoryA-1_File2.txt"), Is.True);
-
-                Assert.That(subDirectoriesToFiles.ContainsKey("SubDirectoryA/SubDirectoryA-2"), Is.True);
-                Assert.That(subDirectoriesToFiles["SubDirectoryA/SubDirectoryA-2"].Contains("SubDirectoryA-2_File1.txt"), Is.True);
-                Assert.That(subDirectoriesToFiles["SubDirectoryA/SubDirectoryA-2"].Contains("SubDirectoryA-2_File2.txt"), Is.True);
-
-                Assert.That(subDirectoriesToFiles.ContainsKey("SubDirectoryB"), Is.True);
-                Assert.That(subDirectoriesToFiles["SubDirectoryB"].Contains("SubDirectoryB.txt"), Is.True);
-
-                Assert.That(subDirectoriesToFiles.ContainsKey("SubDirectoryB/SubDirectoryB-1"), Is.True);
-                Assert.That(subDirectoriesToFiles["SubDirectoryB/SubDirectoryB-1"].Contains("SubDirectoryB-1_File1.txt"), Is.True);
-                Assert.That(subDirectoriesToFiles["SubDirectoryB/SubDirectoryB-1"].Contains("SubDirectoryB-1_File2.txt"), Is.True);
-
-                Assert.That(subDirectoriesToFiles.ContainsKey("SubDirectoryB/SubDirectoryB-2"), Is.True);
-                Assert.That(subDirectoriesToFiles["SubDirectoryB/SubDirectoryB-2"].Contains("SubDirectoryB-2_File1.txt"), Is.True);
-                Assert.That(subDirectoriesToFiles["SubDirectoryB/SubDirectoryB-2"].Contains("SubDirectoryB-2_File2.txt"), Is.True);
-            }
-        }
-
-        [Test]
         public void GivenAStreamContainingAZipFileContainingAHierarchyOfFilesAndSubDirectories_WeCanCreateATreeOfDirectoriesAndFiles()
         {
             // Arrange
