@@ -130,26 +130,26 @@ namespace DotNetZipExploration
                 Assert.That(root.Files.Select(ze => ze.FileName), Is.EquivalentTo(new[] { "File1.txt", "File2.txt", "File3.txt" }));
 
                 var subDirectoryA = root.SubDirectories.Single(d => d.DirectoryName == "SubDirectoryA");
-                Assert.That(subDirectoryA.SubDirectories.Select(sd => sd.DirectoryName), Is.EquivalentTo(new[] { "SubDirectoryA-1", "SubDirectoryA-2" }));
+                Assert.That(subDirectoryA.SubDirectories.Select(sd => sd.DirectoryName), Is.EquivalentTo(new[] { "SubDirectoryA/SubDirectoryA-1", "SubDirectoryA/SubDirectoryA-2" }));
                 Assert.That(subDirectoryA.Files.Select(ze => ze.FileName), Is.EquivalentTo(new[] { "SubDirectoryA/SubDirectoryA.txt" }));
 
-                var subDirectoryA_1 = subDirectoryA.SubDirectories.Single(d => d.DirectoryName == "SubDirectoryA-1");
+                var subDirectoryA_1 = subDirectoryA.SubDirectories.Single(d => d.DirectoryName == "SubDirectoryA/SubDirectoryA-1");
                 Assert.That(subDirectoryA_1.SubDirectories.Select(sd => sd.DirectoryName), Is.EquivalentTo(new string[0]));
                 Assert.That(subDirectoryA_1.Files.Select(ze => ze.FileName), Is.EquivalentTo(new[] { "SubDirectoryA/SubDirectoryA-1/SubDirectoryA-1_File1.txt", "SubDirectoryA/SubDirectoryA-1/SubDirectoryA-1_File2.txt" }));
 
-                var subDirectoryA_2 = subDirectoryA.SubDirectories.Single(d => d.DirectoryName == "SubDirectoryA-2");
+                var subDirectoryA_2 = subDirectoryA.SubDirectories.Single(d => d.DirectoryName == "SubDirectoryA/SubDirectoryA-2");
                 Assert.That(subDirectoryA_2.SubDirectories.Select(sd => sd.DirectoryName), Is.EquivalentTo(new string[0]));
                 Assert.That(subDirectoryA_2.Files.Select(ze => ze.FileName), Is.EquivalentTo(new[] { "SubDirectoryA/SubDirectoryA-2/SubDirectoryA-2_File1.txt", "SubDirectoryA/SubDirectoryA-2/SubDirectoryA-2_File2.txt" }));
 
                 var subDirectoryB = root.SubDirectories.Single(d => d.DirectoryName == "SubDirectoryB");
-                Assert.That(subDirectoryB.SubDirectories.Select(sd => sd.DirectoryName), Is.EquivalentTo(new[] { "SubDirectoryB-1", "SubDirectoryB-2" }));
+                Assert.That(subDirectoryB.SubDirectories.Select(sd => sd.DirectoryName), Is.EquivalentTo(new[] { "SubDirectoryB/SubDirectoryB-1", "SubDirectoryB/SubDirectoryB-2" }));
                 Assert.That(subDirectoryB.Files.Select(ze => ze.FileName), Is.EquivalentTo(new[] { "SubDirectoryB/SubDirectoryB.txt" }));
 
-                var subDirectoryB_1 = subDirectoryB.SubDirectories.Single(d => d.DirectoryName == "SubDirectoryB-1");
+                var subDirectoryB_1 = subDirectoryB.SubDirectories.Single(d => d.DirectoryName == "SubDirectoryB/SubDirectoryB-1");
                 Assert.That(subDirectoryB_1.SubDirectories.Select(sd => sd.DirectoryName), Is.EquivalentTo(new string[0]));
                 Assert.That(subDirectoryB_1.Files.Select(ze => ze.FileName), Is.EquivalentTo(new[] { "SubDirectoryB/SubDirectoryB-1/SubDirectoryB-1_File1.txt", "SubDirectoryB/SubDirectoryB-1/SubDirectoryB-1_File2.txt" }));
 
-                var subDirectoryB_2 = subDirectoryB.SubDirectories.Single(d => d.DirectoryName == "SubDirectoryB-2");
+                var subDirectoryB_2 = subDirectoryB.SubDirectories.Single(d => d.DirectoryName == "SubDirectoryB/SubDirectoryB-2");
                 Assert.That(subDirectoryB_2.SubDirectories.Select(sd => sd.DirectoryName), Is.EquivalentTo(new string[0]));
                 Assert.That(subDirectoryB_2.Files.Select(ze => ze.FileName), Is.EquivalentTo(new[] { "SubDirectoryB/SubDirectoryB-2/SubDirectoryB-2_File1.txt", "SubDirectoryB/SubDirectoryB-2/SubDirectoryB-2_File2.txt" }));
             }
@@ -167,7 +167,13 @@ namespace DotNetZipExploration
                 var leafDirectories = MyZipTreeBuilder.FindLeafDirectories(root);
 
                 // Assert
-                Assert.That(leafDirectories, Is.EquivalentTo(new[] { "SubDirectoryA-1", "SubDirectoryA-2", "SubDirectoryB-1", "SubDirectoryB-2" }));
+                Assert.That(leafDirectories, Is.EquivalentTo(new[]
+                    {
+                        "SubDirectoryA/SubDirectoryA-1",
+                        "SubDirectoryA/SubDirectoryA-2",
+                        "SubDirectoryB/SubDirectoryB-1",
+                        "SubDirectoryB/SubDirectoryB-2"
+                    }));
             }
         }
 

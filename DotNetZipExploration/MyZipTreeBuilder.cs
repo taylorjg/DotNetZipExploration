@@ -49,24 +49,31 @@ namespace DotNetZipExploration
             return zipFile.EntriesSorted.FirstOrDefault(ze => ze.IsDirectory && ze.FileName == subDirectoryWithTrailingSlash);
         }
 
-        private static MyZipDirectory FindTreeNodeForKey(MyZipDirectory directory, Tuple<string, ZipEntry> key)
+        private static MyZipDirectory FindTreeNodeForKey(MyZipDirectory root, Tuple<string, ZipEntry> key)
         {
             var fullDirectoryPath = key.Item1;
             var directoryZipEntry = key.Item2;
             var directoryNames = fullDirectoryPath.Split('/');
 
-            var treeNodeForPreviousLevel = directory;
+            var treeNodeForPreviousLevel = root;
+            var fullDirectoryPathSoFar = string.Empty;
 
             foreach (var directoryName in directoryNames)
             {
-                var treeNodeForThisLevel = FindTreeNodeForDirectory(directory, directoryName);
+                if (fullDirectoryPathSoFar.Length > 0)
+                {
+                    fullDirectoryPathSoFar += "/";
+                }
+                fullDirectoryPathSoFar += directoryName;
+
+                var treeNodeForThisLevel = FindTreeNodeForDirectory(root, directoryName);
                 if (treeNodeForThisLevel != null)
                 {
                     treeNodeForPreviousLevel = treeNodeForThisLevel;
                 }
                 else
                 {
-                    var newSubDirectory = new MyZipDirectory(directoryName, directoryZipEntry);
+                    var newSubDirectory = new MyZipDirectory(fullDirectoryPathSoFar, directoryZipEntry);
                     if (treeNodeForPreviousLevel != null)
                     {
                         treeNodeForPreviousLevel.SubDirectories.Add(newSubDirectory);
@@ -80,7 +87,8 @@ namespace DotNetZipExploration
 
         private static MyZipDirectory FindTreeNodeForDirectory(MyZipDirectory directory, string directoryName)
         {
-            if (directory.DirectoryName == directoryName)
+            var lastDirectoryNameComponent = directory.DirectoryName.Split('/').LastOrDefault();
+            if (lastDirectoryNameComponent != null && lastDirectoryNameComponent == directoryName)
             {
                 return directory;
             }
